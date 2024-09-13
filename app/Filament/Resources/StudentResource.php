@@ -8,6 +8,7 @@ use Filament\Tables;
 use App\Models\Student;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Filament\Resources\StudentResource\Pages\ListStudents;
 use App\Filament\Resources\StudentResource\Pages\CreateStudent;
+use Filament\Infolists\Components\TextEntry;
 
 class StudentResource extends Resource
 {
@@ -75,21 +77,20 @@ class StudentResource extends Resource
                     static function (HasTable $livewire, stdClass $rowLoop): string {
                         $recordsPerPage = (int) $livewire->getTableRecordsPerPage();
                         $currentPage = (int) $livewire->getTablePage();
-                        
+
                         return (string) (
                             $rowLoop->iteration +
                             ($recordsPerPage * ($currentPage - 1))
                         );
                     }
                 ),
-                
+
                 TextColumn::make('nis')
                     ->label('NIS'),
                 TextColumn::make('name')
                     ->label('Nama Student'),
                 TextColumn::make('gender'),
                 TextColumn::make('birthday'),
-                TextColumn::make('religion'),
                 TextColumn::make('contact'),
                 ImageColumn::make('profile'),
             ])
@@ -97,6 +98,7 @@ class StudentResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             // ->headerActions([
@@ -122,6 +124,7 @@ class StudentResource extends Resource
             'index' => Pages\ListStudents::route('/'),
             'create' => Pages\CreateStudent::route('/create'),
             'edit' => Pages\EditStudent::route('/{record}/edit'),
+            'view' => Pages\ViewStudent::route('/{record}'),
         ];
     }
 
@@ -134,5 +137,14 @@ class StudentResource extends Resource
         } else {
             return 'Students';
         }
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                TextEntry::make('nis'),
+                TextEntry::make('name'),
+            ]);
     }
 }
