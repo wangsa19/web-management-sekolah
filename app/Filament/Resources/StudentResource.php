@@ -28,6 +28,8 @@ use App\Filament\Resources\StudentResource\RelationManagers;
 use App\Filament\Resources\StudentResource\Pages\ListStudents;
 use App\Filament\Resources\StudentResource\Pages\CreateStudent;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
 
 class StudentResource extends Resource
 {
@@ -93,6 +95,8 @@ class StudentResource extends Resource
                 TextColumn::make('birthday'),
                 TextColumn::make('contact'),
                 ImageColumn::make('profile'),
+                TextColumn::make('status')
+                    ->formatStateUsing(fn (string $state): string => ucwords("{$state}")),
             ])
             ->filters([
                 //
@@ -106,6 +110,22 @@ class StudentResource extends Resource
             // ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    BulkAction::make('Accept')
+                        ->icon('heroicon-m-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            return $records->each->update(['status' => 'accept']);
+                        }),
+                    BulkAction::make('Off')
+                        ->icon('heroicon-m-x-circle')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            return $records->each(function ($records){
+                                $id = $records->id;
+                                Student::where('id', $id)->update(['status' => 'off']);
+                            });
+                        })
+                    ,
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
