@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ClassroomResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ClassroomResource\RelationManagers;
+use App\Filament\Resources\ClassroomResource\RelationManagers\SubjectsRelationManager;
+use App\Filament\Resources\TeacherResource\RelationManagers\ClassroomRelationManager;
 use Filament\Tables\Columns\TextColumn;
 
 class ClassroomResource extends Resource
@@ -64,10 +66,19 @@ class ClassroomResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            SubjectsRelationManager::class,
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageClassrooms::route('/'),
+            'index' => Pages\ListClassrooms::route('/'),
+            'create' => Pages\CreateClassroom::route('/create'),
+            'edit' => Pages\EditClassroom::route('/{record}/edit'),
         ];
     }
 }

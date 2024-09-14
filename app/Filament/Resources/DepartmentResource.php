@@ -25,11 +25,11 @@ class DepartmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Subject';
+    protected static ?string $navigationLabel = 'Department';
 
-    protected static ?string $navigationGroup = 'Academic';
+    protected static ?string $navigationGroup = 'Source';
 
-    protected static ?int $navigationSort = 24;
+    protected static ?int $navigationSort = 33;
 
     public static function form(Form $form): Form
     {
