@@ -1,11 +1,29 @@
 import preset from './vendor/filament/filament/tailwind.config.preset'
 
-export default {
+const colors = require('tailwindcss/colors')
+
+module.exports = {
     presets: [preset],
     content: [
-        './app/Filament/**/*.php',
+        './resources/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
-        "./resources/views/**/*.blade.php",
-        "./resources/views/**/*.js",
+    ],
+    darkMode: 'class',
+    theme: {
+        extend: {
+            fontFamily: {
+                poppins: ['Poppins', 'system-ui', 'sans-serif'],
+              },
+            colors: {
+                danger: colors.rose,
+                primary: colors.blue,
+                success: colors.green,
+                warning: colors.amber,
+            },
+        },
+    },
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
     ],
 }
